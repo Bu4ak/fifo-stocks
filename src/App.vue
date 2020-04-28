@@ -1,28 +1,58 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <v-app id="inspire">
+        <v-navigation-drawer v-model="drawer" app>
+            <v-list dense>
+                <v-list-item v-if="isLoggedIn" @click="logout">
+                    <v-list-item-action>
+                        <v-icon>fa-sign-out-alt</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Logout</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item v-else link href="/signin">
+                    <v-list-item-action>
+                        <v-icon>fa-sign-in-alt</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Login</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+
+        <v-app-bar app color="#8bc34a" dark>
+            <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
+            <v-toolbar-title></v-toolbar-title>
+        </v-app-bar>
+
+        <v-content>
+                <router-view/>
+        </v-content>
+        <v-footer color="#8bc34a" app>
+            <span class="white--text">&copy; 2020</span>
+        </v-footer>
+    </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+    import '@fortawesome/fontawesome-free/css/all.css'
+    import {IS_LOGGED_IN} from "./vuex/mutation-types";
+    export default {
+        iconfont: 'fa',
+        data: () => ({
+            drawer: false,
+        }),
+        computed: {
+            isLoggedIn() {
+                return this.$store.getters.isLoggedIn
+            }
+        },
+        methods: {
+            logout() {
+                this.$store.commit(IS_LOGGED_IN, false)
+                this.$router.push({name: 'signin'});
+            }
+        },
+    }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
