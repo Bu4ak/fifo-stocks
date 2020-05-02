@@ -37,7 +37,7 @@
 
 <script>
     import '@fortawesome/fontawesome-free/css/all.css'
-    import {IS_LOGGED_IN} from "./vuex/mutation-types";
+    import {IS_LOGGED_IN, TOKEN} from "./vuex/mutation-types";
     export default {
         iconfont: 'fa',
         data: () => ({
@@ -51,6 +51,7 @@
         methods: {
             logout() {
                 this.$store.commit(IS_LOGGED_IN, false)
+                this.$store.commit(TOKEN, '')
                 this.$router.push({name: 'signin'});
             }
         },
