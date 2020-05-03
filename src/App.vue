@@ -27,7 +27,7 @@
         </v-app-bar>
 
         <v-content>
-                <router-view/>
+            <router-view/>
         </v-content>
         <v-footer color="#8bc34a" app>
             <span class="white--text">&copy; 2020</span>
@@ -37,7 +37,7 @@
 
 <script>
     import '@fortawesome/fontawesome-free/css/all.css'
-    import {IS_LOGGED_IN, TOKEN} from "./vuex/mutation-types";
+
     export default {
         iconfont: 'fa',
         data: () => ({
@@ -50,8 +50,8 @@
         },
         methods: {
             logout() {
-                this.$store.commit(IS_LOGGED_IN, false)
-                this.$store.commit(TOKEN, '')
+                window.localStorage.clear();
+                window.location.reload();
                 this.$router.push({name: 'signin'});
             }
         },

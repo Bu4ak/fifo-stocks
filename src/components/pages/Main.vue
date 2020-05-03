@@ -6,7 +6,7 @@
                    sm="8"
                    md="4">
             </v-col>
-            <stocks-carousel :slides="stocks"></stocks-carousel>
+            <stocks-carousel v-if="stocks.length > 0" :slides="stocks"></stocks-carousel>
         </v-row>
         <add-stock></add-stock>
     </v-container>
@@ -28,9 +28,6 @@
             }
         },
         methods: {
-            logout() {
-                console.log('logout')
-            }
         }
     }
 </script>

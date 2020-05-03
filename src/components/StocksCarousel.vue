@@ -8,7 +8,7 @@
             interval="9000"
     >
         <v-carousel-item
-                v-for="(item, i) in slides" :key="item.name" >
+                v-for="(item) in slides" :key="item.name" >
             <v-sheet  height="100%" >
                 <v-row
                         class="fill-height"
@@ -18,13 +18,14 @@
 
                     <div class="display-3 text-center">
 <!--                        <stock-card :name=item.name :price=item.ticker></stock-card>-->
-                        <p>{{item.name}}</p>
-                        {{item.ticker}}
+                        <h3>{{item.name}}</h3>
+                        <h5>{{item.ticker}}</h5>
                         <v-row class="fill-height"
                                align="center"
                                justify="center">
-
-                        <v-btn >Click {{i}}</v-btn>
+                            <v-btn class="mx-2" fab dark large color="green">
+                                <v-icon dark>fa-pencil-alt</v-icon>
+                            </v-btn>
                         </v-row>
                     </div>
                 </v-row>

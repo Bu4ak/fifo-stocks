@@ -3,14 +3,14 @@
         <v-dialog v-model="dialog" persistent max-width="600px">
             <template v-slot:activator="{ on }">
                 <v-fab-transition>
-                    <v-btn  style="bottom: 15px;"
-                            color="green"
-                            dark
-                            absolute
-                            bottom
-                            right
-                            fab
-                            v-on="on"
+                    <v-btn style="bottom: 15px;"
+                           color="green"
+                           dark
+                           absolute
+                           bottom
+                           right
+                           fab
+                           v-on="on"
                     >
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
@@ -55,10 +55,27 @@
         }),
         methods: {
             addStock(name, ticker) {
-                this.dialog = false
-                this.$store.commit(STOCK_OBJECT, {name: name, ticker: ticker, positions: []})
-                this.name = ''
-                this.ticker = ''
+                this.axios
+                    .post('/stock', {login: this.login, password: this.password})
+                    .then(response => {
+                        console.log(response)
+                        this.name = ''
+                        this.ticker = ''
+                        this.$store.commit(STOCK_OBJECT, {name: name, ticker: ticker, positions: []})
+                        this.dialog = false
+                    })
+                    .catch(err => {
+                        if (err.response.data.login) {
+                            this.loginErrors = err.response.data.login
+                        }
+                        if (err.response.data.password) {
+                            this.passwordErrors = err.response.data.password
+                        }
+
+                        if (!err.response.data.login && !err.response.data.password) {
+                            this.commonErrors = [err.message]
+                        }
+                    })
             }
         },
 

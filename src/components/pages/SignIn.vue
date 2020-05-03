@@ -45,39 +45,24 @@
                 this.passwordErrors = []
                 this.loginErrors = []
                 this.commonErrors = []
-                fetch('http://10.0.0.45:8080/' + route, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({login: this.login, password: this.password})
-                })
+                this.axios
+                    .post(route, {login: this.login, password: this.password})
                     .then(response => {
-                        if (response.ok) {
-                            return response.json()
-                        }
-                        throw response
-                    })
-                    .then(json => {
-                        console.log('then', json)
                         this.$store.commit(IS_LOGGED_IN, true)
-                        this.$store.commit(TOKEN, json.token)
+                        this.$store.commit(TOKEN, response.token)
                         this.$router.push({name: 'main'});
                     })
                     .catch(err => {
-                        return err.json().then((responseJson) => {
-                            if (responseJson.login) {
-                                this.loginErrors = responseJson.login
-                            }
-                            if (responseJson.password) {
-                                this.passwordErrors = responseJson.password
-                            }
+                        if (err.response.data.login) {
+                            this.loginErrors = err.response.data.login
+                        }
+                        if (err.response.data.password) {
+                            this.passwordErrors = err.response.data.password
+                        }
 
-                            if (!responseJson.password && !responseJson.login) {
-                                this.commonErrors = [responseJson.message]
-                            }
-                        })
+                        if (!err.response.data.login && !err.response.data.password) {
+                            this.commonErrors = [err.message]
+                        }
                     })
             },
             signIn() {
