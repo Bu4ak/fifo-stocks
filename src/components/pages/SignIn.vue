@@ -49,7 +49,7 @@
                     .post(route, {login: this.login, password: this.password})
                     .then(response => {
                         this.$store.commit(IS_LOGGED_IN, true)
-                        this.$store.commit(TOKEN, response.token)
+                        this.$store.commit(TOKEN, response.data.token)
                         this.$router.push({name: 'main'});
                     })
                     .catch(err => {

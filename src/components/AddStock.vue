@@ -36,7 +36,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                    <v-btn color="blue darken-1" :disabled="!name || !ticker" text @click="addStock(name, ticker)">Save</v-btn>
+                    <v-btn color="blue darken-1" :disabled="!name || !ticker" text @click="addStock">Save</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -54,14 +54,13 @@
             ticker: ''
         }),
         methods: {
-            addStock(name, ticker) {
+            addStock() {
                 this.axios
-                    .post('/stock', {login: this.login, password: this.password})
+                    .post('/stock', {name: this.name, ticker: this.ticker, token: this.$store.getters.token})
                     .then(response => {
-                        console.log(response)
                         this.name = ''
                         this.ticker = ''
-                        this.$store.commit(STOCK_OBJECT, {name: name, ticker: ticker, positions: []})
+                        this.$store.commit(STOCK_OBJECT, {name: response.data.name, ticker: response.data.ticker, positions: []})
                         this.dialog = false
                     })
                     .catch(err => {
