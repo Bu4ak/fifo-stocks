@@ -23,20 +23,22 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-col cols="12" sm="6" md="6">
-                                <v-text-field v-model="name" label="Name *" required></v-text-field>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-text-field v-model="name" label="Name" required></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6" md="6">
+                            <v-col cols="12" sm="12" md="12">
                                 <v-text-field v-model="ticker" label="Ticker" required></v-text-field>
                             </v-col>
+                            <v-col cols="12" sm="12" md="12">
+                                <v-text-field type="number" :min="1" v-model.number="lot_size" label="Lot size" required></v-text-field >
+                            </v-col>
                         </v-row>
-                        <small>* - required field</small>
                     </v-container>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                    <v-btn color="blue darken-1" :disabled="!name || !ticker" text @click="addStock">Save</v-btn>
+                    <v-btn color="blue darken-1" :disabled="!name || !ticker || !lot_size" text @click="addStock">Save</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -51,12 +53,13 @@
         data: () => ({
             dialog: false,
             name: '',
-            ticker: ''
+            ticker: '',
+            lot_size: 1,
         }),
         methods: {
             addStock() {
                 this.axios
-                    .post('/stock', {name: this.name, ticker: this.ticker, token: this.$store.getters.token})
+                    .post('/stock', {name: this.name, lot_size: this.lot_size, ticker: this.ticker, token: this.$store.getters.token})
                     .then(response => {
                         this.name = ''
                         this.ticker = ''
