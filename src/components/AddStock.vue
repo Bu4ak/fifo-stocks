@@ -30,7 +30,7 @@
                                 <v-text-field v-model="ticker" label="Ticker" required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="12" md="12">
-                                <v-text-field type="number" :min="1" v-model.number="lot_size" label="Lot size" required></v-text-field >
+                                <v-text-field type="number" :min="1" v-model.number="lot_size" label="Lot size" required></v-text-field>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -63,7 +63,14 @@
                     .then(response => {
                         this.name = ''
                         this.ticker = ''
-                        this.$store.commit(STOCK_OBJECT, {name: response.data.name, ticker: response.data.ticker, positions: []})
+                        this.$store.commit(STOCK_OBJECT, {
+                                id: response.data.id,
+                                name: response.data.name,
+                                ticker: response.data.ticker,
+                                lot_size: response.data.lot_size,
+                                created_at: response.data.created_at,
+                                entries: []
+                            })
                         this.dialog = false
                     })
                     .catch(err => {
@@ -80,7 +87,6 @@
                     })
             }
         },
-
     }
 </script>
 

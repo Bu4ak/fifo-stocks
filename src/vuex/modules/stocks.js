@@ -3,11 +3,12 @@ import {STOCK_OBJECT,} from '../mutation-types';
 export default {
     state: {
         stock: {
-            uuid: '',
+            id: '',
             name: '',
             ticker: '',
             lot_size: 1,
-            positions: [],
+            created_at: '',
+            entries: [],
         },
         stocks: []
     },

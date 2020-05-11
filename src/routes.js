@@ -1,6 +1,7 @@
 import SignIn from "./components/pages/SignIn";
 import Main from "./components/pages/Main";
 import store from "./vuex/Store";
+import Stock from "./components/pages/Stock";
 
 export default {
     mode: 'history',
@@ -26,6 +27,18 @@ export default {
                      next({path: '/'});
                 } else {
                      next();
+                }
+            }
+        },
+        {
+            name: 'stock_show',
+            path: '/stock/:id',
+            component: Stock,
+            beforeEnter: (to, from, next) => {
+                if (store.getters.isLoggedIn) {
+                    next();
+                } else {
+                    next({path: '/'});
                 }
             }
         },
