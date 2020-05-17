@@ -55,6 +55,7 @@
             name: '',
             ticker: '',
             lot_size: 1,
+            commonErrors: []
         }),
         methods: {
             addStock() {
@@ -69,20 +70,26 @@
                                 ticker: response.data.ticker,
                                 lot_size: response.data.lot_size,
                                 created_at: response.data.created_at,
-                                entries: []
+                                entries: response.data.entries
                             })
                         this.dialog = false
                     })
                     .catch(err => {
+                        if (!err.response) {
+                            this.commonErrors = [err.message]
+                            return
+                        }
+
+                        if (!err.response.data.login && !err.response.data.password) {
+                            this.commonErrors = [err.message]
+                            return
+                        }
+
                         if (err.response.data.login) {
                             this.loginErrors = err.response.data.login
                         }
                         if (err.response.data.password) {
                             this.passwordErrors = err.response.data.password
-                        }
-
-                        if (!err.response.data.login && !err.response.data.password) {
-                            this.commonErrors = [err.message]
                         }
                     })
             }

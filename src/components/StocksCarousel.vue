@@ -7,8 +7,7 @@
             light
             interval="9000"
     >
-        <v-carousel-item
-                v-for="(item) in slides" :key="item.name">
+        <v-carousel-item v-for="item in slides" :key="item.id">
             <v-sheet height="100%">
                 <v-row
                         class="fill-height"

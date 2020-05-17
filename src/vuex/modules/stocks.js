@@ -1,4 +1,4 @@
-import {STOCK_OBJECT,} from '../mutation-types';
+import {STOCK_COLLECTION, STOCK_OBJECT,} from '../mutation-types';
 
 export default {
     state: {
@@ -8,24 +8,24 @@ export default {
             ticker: '',
             lot_size: 1,
             created_at: '',
-            entries: [],
+            entries: {},
         },
-        stocks: []
+        stocks: {}
     },
     mutations: {
         [STOCK_OBJECT](state, data) {
             if (data && typeof data === 'object') {
-                data.ticker = data.ticker.toUpperCase()
-
                 state.stock = data
-                state.stocks.push(state.stock)
+                let obj = {}
+                obj[data.id] = data
+                state.stocks = {...state.stocks, ...obj}
             }
         },
-        // [STOCK_COLLECTION](state, data) {
-        //     if (data && typeof data === 'object' && data.length) {
-        //         state.stocks = data;
-        //     }
-        // }
+        [STOCK_COLLECTION](state, data) {
+            if (data && typeof data === 'object' && data.length) {
+                state.stocks = data;
+            }
+        }
     },
     getters: {
         getStocks(state) {
