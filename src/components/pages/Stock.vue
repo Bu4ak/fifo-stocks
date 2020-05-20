@@ -27,15 +27,15 @@
                     <hr>
                     <tr>
                         <td><h3 class="text-no-wrap">Total count</h3></td>
-                        <td><h3 class="text-no-wrap">{{ totalCount }}</h3></td>
+                        <td><h3 class="text-no-wrap">{{ totalCount - sellCount * stock.lot_size}}</h3></td>
                     </tr>
                     <tr>
                         <td><h3 class="text-no-wrap">Total amount</h3></td>
-                        <td><h3>{{ totalAmount }}</h3></td>
+                        <td><h3>{{ totalAmount - (sellAmount * this.stock.lot_size) }}</h3></td>
                     </tr>
                     <tr>
                         <td><h3 class="text-no-wrap">Avg amount</h3></td>
-                        <td><h3>{{ avgAmount }}</h3></td>
+                        <td><h3>{{ isNaN(avgAmount) ? ~~avgAmount : avgAmount }}</h3></td>
                     </tr>
                     </tbody>
                 </v-simple-table>
@@ -59,7 +59,7 @@
                             <v-card-text>
                                 <div>Sell</div>
                                 <v-col class="pa-0" cols="6" sm="6" md="6">
-                                    <v-text-field v-model="sellCount" type="number" :min="1" step="1" label="Count" required></v-text-field>
+                                    <v-text-field v-model="sellCount" type="number" :min="0" step="1" :max="totalCount / stock.lot_size" label="Count" required></v-text-field>
                                 </v-col>
                                 <v-btn rounded style="bottom: 15px" :disabled="!sellCount" absolute right color="red" @click="removeEntry">
                                     <v-icon color="white">fa-minus</v-icon>
@@ -71,8 +71,8 @@
             </v-col>
             <v-col>
                 <v-row>
-                    <v-checkbox v-model="group" :label="'Group'"></v-checkbox>
-                    <entry :entries="stock.entries" :group="group" :sellCount="sellCount"></entry>
+<!--                    <v-checkbox v-model="group" :label="'Group'"></v-checkbox>-->
+                    <entry :stock="stock" @stocks-for-sale="updateTotalCount" :entries="stock.entries" :group="group" :sellCount="sellCount"></entry>
                 </v-row>
 
             </v-col>
@@ -91,6 +91,7 @@
             return {
                 group: false,
                 sellCount: '',
+                sellAmount: 0,
                 buyCount: '',
                 amount: '',
                 password: '',
@@ -106,7 +107,7 @@
             totalCount() {
                 let totalCount = 0
                 for (const item in this.stock.entries) {
-                    totalCount += Number(this.stock.entries[item].count)
+                    totalCount += Number(this.stock.entries[item].count) * this.stock.lot_size
                 }
                 return totalCount
             },
@@ -118,13 +119,22 @@
                 return totalAmount
             },
             avgAmount() {
-                return (this.totalAmount / (this.totalCount * Number(this.stock.lot_size))).toFixed(2)
+                return (this.totalAmount / this.totalCount
+
+                    // (this.totalAmount - this.sellAmount * this.stock.lot_size)
+                    // /
+                    // ((this.totalCount - this.sellCount) * this.stock.lot_size)
+
+                ).toFixed(2)
             }
         },
         mounted() {
             this.getStock()
         },
         methods: {
+            updateTotalCount(e) {
+                this.sellAmount = e
+            },
             getStock() {
                 this.axios
                     .post('stock-data/' + this.stock.id, {token: this.$store.getters.token})
@@ -174,31 +184,29 @@
                     })
             },
             removeEntry() {
-                const count = this.count
-                const amount = this.amount
-                this.amount = ''
-                this.count = ''
+                const count = this.sellCount
+                this.sellCount = ''
                 this.axios
-                    .post('entryadfs', {
+                    .post('entry-sell', {
                         token: this.$store.getters.token,
-                        amount: amount,
                         count: count,
                         stock_id: this.stock.id
                     })
-                    .then(response => {
-                        let entries = {...this.stock.entries}
-                        entries[response.data.id] = {
-                            id: response.data.id,
-                            count: response.data.count,
-                            amount: response.data.amount,
-                            stock_id: response.data.stock_id,
-                            created_at: response.data.created_at,
-                            updated_at: response.data.updated_at,
-                        }
-
-                        this.$store.commit(STOCK_OBJECT, {
-                            ...this.stock, entries: entries
-                        })
+                    .then(() => {
+                        this.getStock()
+                        // let entries = {...this.stock.entries}
+                        // entries[response.data.id] = {
+                        //     id: response.data.id,
+                        //     count: response.data.count,
+                        //     amount: response.data.amount,
+                        //     stock_id: response.data.stock_id,
+                        //     created_at: response.data.created_at,
+                        //     updated_at: response.data.updated_at,
+                        // }
+                        //
+                        // this.$store.commit(STOCK_OBJECT, {
+                        //     ...this.stock, entries: entries
+                        // })
                     })
                     .catch(err => {
                         console.log(err)
