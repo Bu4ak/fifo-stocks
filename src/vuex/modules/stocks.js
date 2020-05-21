@@ -22,7 +22,7 @@ export default {
             }
         },
         [STOCK_COLLECTION](state, data) {
-            if (data && typeof data === 'object' && data.length) {
+            if (data && typeof data === 'object') {
                 state.stocks = data;
             }
         }
