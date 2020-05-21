@@ -137,7 +137,7 @@
             },
             getStock() {
                 this.axios
-                    .post('stock-data/' + this.stock.id, {token: this.$store.getters.token})
+                    .post('stock-data/' + this.$route.params.id, {token: this.$store.getters.token})
                     .then(response => {
                         this.$store.commit(STOCK_OBJECT, {
                             id: response.data.id,
