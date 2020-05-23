@@ -40,38 +40,19 @@
                     </tbody>
                 </v-simple-table>
                 <v-row>
-                    <v-col class="pa-1" cols="12" sm="12" md="12">
-                        <v-card>
-                            <v-card-text>
-                                <div>Buy</div>
-                                <v-text-field v-model="amount" type="number" :min="0.001" step="0.001" label="Price" required></v-text-field>
-                                <v-col class="pa-0" cols="6" sm="6" md="6">
-                                    <v-text-field v-model="buyCount" type="number" :min="1" step="1" label="Count" required></v-text-field>
-                                </v-col>
-                                <v-btn rounded style="bottom: 15px" :disabled="!amount || !buyCount" absolute right color="green" @click="addEntry">
-                                    <v-icon color="white">fa-plus</v-icon>
-                                </v-btn>
-                            </v-card-text>
-                        </v-card>
+                    <v-col>
+                        <v-btn min-width="150px" v-model="showBuyForm" @click="toggleBuyForm" dark outlined color="green">BUY</v-btn>
                     </v-col>
-                    <v-col class="pa-1" cols="12" sm="12" md="12">
-                        <v-card>
-                            <v-card-text>
-                                <div>Sell</div>
-                                <v-col class="pa-0" cols="6" sm="6" md="6">
-                                    <v-text-field v-model="sellCount" type="number" :min="0" step="1" :max="totalCount / stock.lot_size" label="Count" required></v-text-field>
-                                </v-col>
-                                <v-btn rounded style="bottom: 15px" :disabled="!sellCount" absolute right color="red" @click="removeEntry">
-                                    <v-icon color="white">fa-minus</v-icon>
-                                </v-btn>
-                            </v-card-text>
-                        </v-card>
+                    <v-col>
+                        <v-btn min-width="150px" v-model="showSellForm" @click="toggleSellForm" dark outlined color="red">SELL</v-btn>
                     </v-col>
+                    <buy-entry-form v-if="showBuyForm" transition="fade"></buy-entry-form>
+                    <sell-entry-form v-if="showSellForm" :max="totalCount / stock.lot_size" @removed="getStock"></sell-entry-form>
                 </v-row>
             </v-col>
             <v-col>
                 <v-row>
-<!--                    <v-checkbox v-model="group" :label="'Group'"></v-checkbox>-->
+                    <!--                    <v-checkbox v-model="group" :label="'Group'"></v-checkbox>-->
                     <entry :stock="stock" @stocks-for-sale="updateTotalCount" :entries="stock.entries" :group="group" :sellCount="sellCount"></entry>
                 </v-row>
 
@@ -83,12 +64,16 @@
 <script>
     import {STOCK_OBJECT} from "../../vuex/mutation-types";
     import Entry from "../stock/Entry";
+    import SellEntryForm from "../stock/SellEntryForm";
+    import BuyEntryForm from "../stock/BuyEntryForm";
 
     export default {
         name: "SignIn",
-        components: {Entry},
+        components: {BuyEntryForm, SellEntryForm, Entry},
         data() {
             return {
+                showSellForm: false,
+                showBuyForm: false,
                 group: false,
                 sellCount: '',
                 sellAmount: 0,
@@ -132,6 +117,14 @@
             this.getStock()
         },
         methods: {
+            toggleBuyForm() {
+                this.showBuyForm = !this.showBuyForm
+                this.showSellForm = false
+            },
+            toggleSellForm() {
+                this.showSellForm = !this.showSellForm
+                this.showBuyForm = false
+            },
             updateTotalCount(e) {
                 this.sellAmount = e
             },
@@ -147,66 +140,6 @@
                             created_at: response.data.created_at,
                             entries: response.data.entries
                         })
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-            },
-            addEntry() {
-                const count = this.buyCount
-                const amount = this.amount
-                this.amount = ''
-                this.buyCount = ''
-                this.axios
-                    .post('entry', {
-                        token: this.$store.getters.token,
-                        amount: amount,
-                        count: count,
-                        stock_id: this.stock.id
-                    })
-                    .then(response => {
-                        let entries = {...this.stock.entries}
-                        entries[response.data.id] = {
-                            id: response.data.id,
-                            count: response.data.count,
-                            amount: response.data.amount,
-                            stock_id: response.data.stock_id,
-                            created_at: response.data.created_at,
-                            updated_at: response.data.updated_at,
-                        }
-
-                        this.$store.commit(STOCK_OBJECT, {
-                            ...this.stock, entries: entries
-                        })
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-            },
-            removeEntry() {
-                const count = this.sellCount
-                this.sellCount = ''
-                this.axios
-                    .post('entry-sell', {
-                        token: this.$store.getters.token,
-                        count: count,
-                        stock_id: this.stock.id
-                    })
-                    .then(() => {
-                        this.getStock()
-                        // let entries = {...this.stock.entries}
-                        // entries[response.data.id] = {
-                        //     id: response.data.id,
-                        //     count: response.data.count,
-                        //     amount: response.data.amount,
-                        //     stock_id: response.data.stock_id,
-                        //     created_at: response.data.created_at,
-                        //     updated_at: response.data.updated_at,
-                        // }
-                        //
-                        // this.$store.commit(STOCK_OBJECT, {
-                        //     ...this.stock, entries: entries
-                        // })
                     })
                     .catch(err => {
                         console.log(err)

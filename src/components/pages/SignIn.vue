@@ -5,17 +5,17 @@
                 <v-card class="elevation-12">
                     <v-card-text>
                         <v-form>
-                            <v-text-field v-model="login" label="Login" required></v-text-field>
+                            <v-text-field v-model="login" label="Login"></v-text-field>
                             <validation-error :errors="loginErrors"></validation-error>
-                            <v-text-field v-model="password" label="Password" required :type="'password'"></v-text-field>
+                            <v-text-field v-model="password" label="Password" :type="'password'"></v-text-field>
                             <validation-error :errors="passwordErrors"></validation-error>
                         </v-form>
                         <validation-error :errors="commonErrors"></validation-error>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer/>
-                        <v-btn :disabled="login.length < 3 || password.length < 5" color="success" outlined @click="signIn">Sign in</v-btn>
-                        <v-btn :disabled="login.length < 3 || password.length < 5" color="success" @click="signUp">Sign up</v-btn>
+                        <v-btn color="success" outlined @click="signIn">Login</v-btn>
+                        <v-btn color="success" @click="signUp">Register</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>

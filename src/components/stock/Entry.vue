@@ -9,10 +9,10 @@
     <!--        </v-card>-->
 
     <!--    </div>-->
-    <div>
-        <v-card class="mx-auto ma-2" min-width="400" v-for="(item, i) in entries" :key="item.id">
+    <div class="ma-1">
+        <v-card class="mx-auto ma-2" min-width="367" v-for="(item, i) in entries" :key="item.id">
             <v-card-text v-bind:style="getHighlightStyle(i)">
-                <span style="position: absolute;"><b>{{item.amount}}</b> </span>
+                <span style="position: absolute;"><b>{{parseFloat(item.amount).toFixed(2)}}</b> </span>
                 <span style="position: absolute; margin-left: 100px"><b>{{item.count}}</b> <small>x{{stock.lot_size }}</small></span>
                 <span class="float-right">{{new Date(item.created_at).toDateString()}}</span>
             </v-card-text>
@@ -76,5 +76,15 @@
 </script>
 
 <style scoped>
-
+    .fadeHeight-enter-active,
+    .fadeHeight-leave-active {
+        transition: all 0.2s;
+        max-height: 230px;
+    }
+    .fadeHeight-enter,
+    .fadeHeight-leave-to
+    {
+        opacity: 0;
+        max-height: 0px;
+    }
 </style>
