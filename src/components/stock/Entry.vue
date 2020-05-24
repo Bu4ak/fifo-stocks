@@ -76,15 +76,4 @@
 </script>
 
 <style scoped>
-    .fadeHeight-enter-active,
-    .fadeHeight-leave-active {
-        transition: all 0.2s;
-        max-height: 230px;
-    }
-    .fadeHeight-enter,
-    .fadeHeight-leave-to
-    {
-        opacity: 0;
-        max-height: 0px;
-    }
 </style>

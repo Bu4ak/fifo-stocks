@@ -27,11 +27,11 @@
                     <hr>
                     <tr>
                         <td><h3 class="text-no-wrap">Total count</h3></td>
-                        <td><h3 class="text-no-wrap">{{ totalCount - sellCount * stock.lot_size}}</h3></td>
+                        <td><h3 class="text-no-wrap">{{ totalCount }}</h3></td>
                     </tr>
                     <tr>
                         <td><h3 class="text-no-wrap">Total amount</h3></td>
-                        <td><h3>{{ totalAmount - (sellAmount * this.stock.lot_size) }}</h3></td>
+                        <td><h3>{{ totalAmount }}</h3></td>
                     </tr>
                     <tr>
                         <td><h3 class="text-no-wrap">Avg amount</h3></td>
@@ -46,14 +46,15 @@
                     <v-col>
                         <v-btn min-width="150px" v-model="showSellForm" @click="toggleSellForm" dark outlined color="red">SELL</v-btn>
                     </v-col>
-                    <buy-entry-form v-if="showBuyForm" transition="fade"></buy-entry-form>
-                    <sell-entry-form v-if="showSellForm" :max="totalCount / stock.lot_size" @removed="getStock"></sell-entry-form>
+                    <buy-entry-form  v-if="showBuyForm" transition="fade"></buy-entry-form>
+                    <sell-entry-form @price-for-sale="updateSellPrice" @count-for-sale="updateSellCount" v-if="showSellForm" :max="totalCount / stock.lot_size"
+                                     @removed="getStock"></sell-entry-form>
                 </v-row>
             </v-col>
             <v-col>
                 <v-row>
                     <!--                    <v-checkbox v-model="group" :label="'Group'"></v-checkbox>-->
-                    <entry :stock="stock" @stocks-for-sale="updateTotalCount" :entries="stock.entries" :group="group" :sellCount="sellCount"></entry>
+                    <entry :stock="stock" :entries="stock.entries" :group="group" :sellCount="sellCount"></entry>
                 </v-row>
 
             </v-col>
@@ -104,13 +105,7 @@
                 return totalAmount
             },
             avgAmount() {
-                return (this.totalAmount / this.totalCount
-
-                    // (this.totalAmount - this.sellAmount * this.stock.lot_size)
-                    // /
-                    // ((this.totalCount - this.sellCount) * this.stock.lot_size)
-
-                ).toFixed(2)
+                return (this.totalAmount / this.totalCount).toFixed(2)
             }
         },
         mounted() {
@@ -125,8 +120,11 @@
                 this.showSellForm = !this.showSellForm
                 this.showBuyForm = false
             },
-            updateTotalCount(e) {
-                this.sellAmount = e
+            updateSellCount(val) {
+                console.log(val)
+            },
+            updateSellPrice(val) {
+                console.log(val)
             },
             getStock() {
                 this.axios

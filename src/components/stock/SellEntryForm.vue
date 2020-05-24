@@ -7,8 +7,9 @@
         >
             <v-card>
                 <v-card-text style="border: solid 1px red;">
+<!--                    <v-text-field type="number" v-model="price" :rules="priceRules" :min="0.001" step="0.001" label="Price"></v-text-field>-->
                     <v-col class="pa-0" cols="6" sm="6" md="6">
-                        <v-text-field :rules="sellCountRules" v-model="sellCount" type="number" :min="0" step="1" :max="maxCount" label="Sell count"
+                        <v-text-field :rules="countRules" v-model="count" type="number" :min="0" step="1" :max="maxCount" label="Count"
                                       required></v-text-field>
                     </v-col>
                     <v-btn rounded style="bottom: 15px" :disabled="!valid" absolute right color="red" @click="removeEntry">
@@ -26,10 +27,13 @@
         props: ['max'],
         data() {
             return {
-                sellCount: undefined,
-                sellCountRules: [
+                count: undefined,
+                countRules: [
                     v => !!v || 'Count is required',
-                    v => (v && v < this.maxCount) || `Count must be less than ${this.maxCount + 1}`,
+                ],
+                price: undefined,
+                priceRules: [
+                    v => !!v || 'Price is required',
                 ],
                 valid: true
             }
@@ -42,17 +46,25 @@
                 return this.$store.state.stocks.stock
             },
         },
+        watch: {
+            count: function (val) {
+                this.$emit('count-for-sale', val)
+            },
+            price: function (val) {
+                this.$emit('price-for-sale', val)
+            },
+        },
         methods: {
             validate() {
                 return this.$refs.form.validate()
             },
-            resetValidation () {
+            resetValidation() {
                 this.$refs.form.resetValidation()
             },
             removeEntry() {
                 if (!this.validate()) return
-                const count = this.sellCount
-                this.sellCount = ''
+                const count = this.count
+                this.count = undefined
                 this.resetValidation()
 
                 this.axios
