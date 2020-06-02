@@ -3,11 +3,9 @@
         <v-dialog v-model="dialog" persistent max-width="600px">
             <template v-slot:activator="{ on }">
                 <v-fab-transition>
-                    <v-btn style="bottom: 15px;"
+                    <v-btn class="pin-top-right"
                            color="green"
                            dark
-                           absolute
-                           bottom
                            right
                            fab
                            v-on="on"
@@ -46,7 +44,7 @@
 </template>
 
 <script>
-    import {STOCK_OBJECT} from "../vuex/mutation-types";
+    // import {STOCK_COLLECTION, } from "../vuex/mutation-types";
 
     export default {
         name: "AddStock",
@@ -62,17 +60,21 @@
                 this.axios
                     .post('/stock', {name: this.name, lot_size: this.lot_size, ticker: this.ticker, token: this.$store.getters.token})
                     .then(response => {
+                        console.log(response)
                         this.name = ''
                         this.ticker = ''
-                        this.$store.commit(STOCK_OBJECT, {
-                                id: response.data.id,
-                                name: response.data.name,
-                                ticker: response.data.ticker,
-                                lot_size: response.data.lot_size,
-                                created_at: response.data.created_at,
-                                entries: response.data.entries
-                            })
+                        // this.$store.commit(STOCK_OBJECT, {
+                        //         id: response.data.id,
+                        //         name: response.data.name,
+                        //         ticker: response.data.ticker,
+                        //         lot_size: response.data.lot_size,
+                        //         created_at: response.data.created_at,
+                        //         entries: response.data.entries
+                        //     })
                         this.dialog = false
+                        this.$router.push({name: 'stock_show', params: {id: response.data.id}});
+
+                        // this.$store.commit(STOCK_COLLECTION, response.data)
                     })
                     .catch(err => {
                         if (!err.response) {
@@ -92,11 +94,15 @@
                             this.passwordErrors = err.response.data.password
                         }
                     })
-            }
+            },
         },
     }
 </script>
 
 <style scoped>
-
+    .pin-top-right {
+        position: fixed;
+        top: 10vh;
+        right: 1em;
+    }
 </style>
