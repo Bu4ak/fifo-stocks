@@ -1,5 +1,5 @@
 <template>
-    <v-container class="fill-height" fluid>
+    <v-container class="fill-height">
         <v-row align="center" justify="center">
             <group :items="stocks"></group>
         </v-row>

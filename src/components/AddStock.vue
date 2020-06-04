@@ -15,29 +15,36 @@
                 </v-fab-transition>
             </template>
             <v-card>
-                <v-card-title>
-                    <span class="headline">Add new stock</span>
-                </v-card-title>
-                <v-card-text>
-                    <v-container>
-                        <v-row>
-                            <v-col cols="12" sm="12" md="12">
-                                <v-text-field v-model="name" label="Name" required></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="12">
-                                <v-text-field v-model="ticker" label="Ticker" required></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="12">
-                                <v-text-field type="number" :min="1" v-model.number="lot_size" label="Lot size" required></v-text-field>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                    <v-btn color="blue darken-1" :disabled="!name || !ticker || !lot_size" text @click="addStock">Save</v-btn>
-                </v-card-actions>
+                <v-form
+                        ref="form"
+                        v-model="valid"
+                        lazy-validation
+                >
+                    <v-card-title>
+                        <span class="headline">Add new stock</span>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-text-field :rules="nameRules" v-model="name" label="Name" required></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-text-field :rules="tickerRules" v-model="ticker" label="Ticker" required></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12">
+                                    <v-text-field :rules="lotSizeRules" type="number" :min="1" v-model.number="lot_size" label="Lot size"
+                                                  required></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                        <v-btn color="blue darken-1" :disabled="!valid" text @click="addStock">Save</v-btn>
+                    </v-card-actions>
+                </v-form>
             </v-card>
         </v-dialog>
     </v-row>
@@ -48,15 +55,38 @@
 
     export default {
         name: "AddStock",
-        data: () => ({
-            dialog: false,
-            name: '',
-            ticker: '',
-            lot_size: 1,
-            commonErrors: []
-        }),
+        data() {
+            return {
+                dialog: false,
+                name: '',
+                nameRules: [
+                    v => !!v || 'Name is required',
+                    v => (v && v.length >= 3) || `The name must be at least 3 characters.`,
+                ],
+                ticker: '',
+                tickerRules: [
+                    v => !!v || 'Ticker is required',
+                    v => (v && v.length >= 2) || `The ticker must be at least 2 characters.`,
+                ],
+                lot_size: 1,
+                lotSizeRules: [
+                    v => !!v || 'Lot size is required',
+                    v => (v && v >= 1) || `The lot size must be greater than 0.`,
+                ],
+                commonErrors: [],
+                valid: true
+            }
+        },
         methods: {
+            validate() {
+                return this.$refs.form.validate()
+            },
+            resetValidation() {
+                this.$refs.form.resetValidation()
+            },
             addStock() {
+                if (!this.validate()) return
+                this.resetValidation()
                 this.axios
                     .post('/stock', {name: this.name, lot_size: this.lot_size, ticker: this.ticker, token: this.$store.getters.token})
                     .then(response => {
