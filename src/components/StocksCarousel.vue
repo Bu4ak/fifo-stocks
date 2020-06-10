@@ -22,7 +22,7 @@
                         <v-row class="fill-height"
                                align="center"
                                justify="center">
-                            <v-btn class="mx-2" fab dark large color="green" @click="show(item.id)">
+                            <v-btn class="mx-2" fab dark large color="#ffdd2d" @click="show(item.id)">
                                 <v-icon dark>fa-eye</v-icon>
                             </v-btn>
                         </v-row>

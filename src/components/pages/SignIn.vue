@@ -5,9 +5,9 @@
                 <v-card class="elevation-12">
                     <v-card-text>
                         <v-form>
-                            <v-text-field v-model="login" label="Login"></v-text-field>
+                            <v-text-field outlined v-model="login" label="Login"></v-text-field>
                             <validation-error :errors="loginErrors"></validation-error>
-                            <v-text-field v-model="password" label="Password" :type="'password'"></v-text-field>
+                            <v-text-field outlined v-model="password" label="Password" :type="'password'"></v-text-field>
                             <validation-error :errors="passwordErrors"></validation-error>
                         </v-form>
                         <validation-error :errors="commonErrors"></validation-error>

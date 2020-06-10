@@ -1,9 +1,9 @@
 <template>
     <v-card class="mx-auto" tile>
         <v-list>
-            <v-progress-circular v-if="showLoader" indeterminate color="#8bc34a"></v-progress-circular>
+            <v-progress-circular v-if="showLoader" indeterminate color="#616871"></v-progress-circular>
             <v-subheader v-else>Search results</v-subheader>
-            <v-list-item-group color="#8bc34a">
+            <v-list-item-group color="#616871">
                 <v-list-item v-for="(item) in results" :key="item.symbol">
                     <v-list-item-content>
                         <v-list-item-title v-text="getTicker(item.trading_grounds)"></v-list-item-title>

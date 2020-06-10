@@ -9,8 +9,8 @@
     <!--        </v-card>-->
 
     <!--    </div>-->
-    <div class="ma-1">
-        <v-card class="mx-auto ma-2" min-width="367" v-for="(item, i) in entries" :key="item.id">
+    <div class="ma-3" style="width: 100%">
+        <v-card class="mx-auto ma-2" v-for="(item, i) in entries" :key="item.id">
             <v-card-text v-bind:style="getHighlightStyle(i)">
                 <span style="position: absolute;"><b>{{parseFloat(item.amount).toFixed(2)}}</b> </span>
                 <span style="position: absolute; margin-left: 100px"><b>{{item.count}}</b> <small>x{{stock.lot_size }}</small></span>

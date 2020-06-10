@@ -4,7 +4,7 @@
             <v-list dense>
                 <div v-if="isLoggedIn">
                     <v-list-item @click="home">
-                        <v-list-item-action>
+                        <v-list-item-action >
                             <v-icon>fa-home</v-icon>
                         </v-list-item-action>
                         <v-list-item-content>
@@ -34,7 +34,7 @@
             </v-list>
         </v-navigation-drawer>
 
-        <v-app-bar app color="#8bc34a" dark>
+        <v-app-bar app color="#616871" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
             <v-toolbar-title></v-toolbar-title>
         </v-app-bar>
@@ -42,7 +42,7 @@
         <v-content>
             <router-view/>
         </v-content>
-        <v-footer color="#8bc34a" app>
+        <v-footer color="#616871" app>
             <span class="white--text">&copy; 2020</span>
         </v-footer>
     </v-app>
@@ -73,3 +73,8 @@
         },
     }
 </script>
+<style scoped>
+    .v-list-item {
+        border-bottom: thin solid rgba(0,0,0,.12)
+    }
+</style>

@@ -4,13 +4,13 @@
             <template v-slot:activator="{ on }">
                 <v-fab-transition>
                     <v-btn class="pin-top-right"
-                           color="green"
+                           color="#ffdd2d"
                            dark
                            right
                            fab
                            v-on="on"
                     >
-                        <v-icon>mdi-plus</v-icon>
+                        <v-icon size="30" color="#333">mdi-plus</v-icon>
                     </v-btn>
                 </v-fab-transition>
             </template>
@@ -27,13 +27,13 @@
                         <v-container>
                             <v-row>
                                 <v-col cols="12" sm="12" md="12">
-                                    <v-text-field :rules="nameRules" v-model="name" label="Name" required></v-text-field>
+                                    <v-text-field outlined :rules="nameRules" v-model="name" label="Name" required></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12">
-                                    <v-text-field :rules="tickerRules" v-model="ticker" label="Ticker" required></v-text-field>
+                                    <v-text-field outlined :rules="tickerRules" v-model="ticker" label="Ticker" required></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12">
-                                    <v-text-field :rules="lotSizeRules" type="number" :min="1" v-model.number="lot_size" label="Lot size"
+                                    <v-text-field outlined :rules="lotSizeRules" type="number" :min="1" v-model.number="lot_size" label="Lot size"
                                                   required></v-text-field>
                                 </v-col>
                             </v-row>

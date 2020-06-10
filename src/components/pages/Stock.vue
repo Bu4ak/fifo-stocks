@@ -2,56 +2,53 @@
     <v-container fluid>
         <v-row>
             <v-col cols="12" sm="8" md="4">
-                <v-simple-table dense>
+                <v-simple-table>
                     <tbody>
-                    <tr>
-                        <td>ID</td>
-                        <td><small>{{stock.id}}</small></td>
-                    </tr>
+                    <!--                    <tr>-->
+                    <!--                        <td>ID</td>-->
+                    <!--                        <td align="right"><small>{{stock.id}}</small></td>-->
+                    <!--                    </tr>-->
                     <tr>
                         <td>Name</td>
-                        <td>{{ stock.name }}</td>
+                        <td align="right">{{ stock.name }}</td>
                     </tr>
                     <tr>
                         <td>Ticker</td>
-                        <td>{{ stock.ticker }}</td>
+                        <td align="right">{{ stock.ticker }}</td>
                     </tr>
                     <tr>
                         <td>Lot size</td>
-                        <td>{{ stock.lot_size }}</td>
+                        <td align="right">{{ stock.lot_size }}</td>
                     </tr>
                     <tr>
                         <td>Created at</td>
-                        <td>{{ (new Date(stock.created_at)).toDateString() }}</td>
-                    </tr>
-                    <hr>
-                    <tr>
-                        <td><h3 class="text-no-wrap">Total count</h3></td>
-                        <td><h3 class="text-no-wrap">{{ totalCount }}</h3></td>
+                        <td align="right">{{ (new Date(stock.created_at)).toDateString() }}</td>
                     </tr>
                     <tr>
-                        <td><h3 class="text-no-wrap">Total amount</h3></td>
-                        <td><h3>{{ totalAmount }}</h3></td>
+                        <td><span class="text-no-wrap">Total count</span></td>
+                        <td align="right"><h3 class="text-no-wrap">{{ totalCount }}</h3></td>
                     </tr>
                     <tr>
-                        <td><h3 class="text-no-wrap">Avg amount</h3></td>
-                        <td><h3>{{ isNaN(avgAmount) ? ~~avgAmount : avgAmount }}</h3></td>
+                        <td><span class="text-no-wrap">Total amount</span></td>
+                        <td align="right"><h3>{{ totalAmount }}</h3></td>
+                    </tr>
+                    <tr>
+                        <td><span class="text-no-wrap">Avg amount</span></td>
+                        <td align="right"><h3>{{ isNaN(avgAmount) ? ~~avgAmount : avgAmount }}</h3></td>
                     </tr>
                     </tbody>
                 </v-simple-table>
-                <v-row>
-                    <v-col>
-                        <v-btn min-width="150px" v-model="showBuyForm" @click="toggleBuyForm" dark outlined color="green">BUY</v-btn>
-                    </v-col>
-                    <v-col>
-                        <v-btn min-width="150px" v-model="showSellForm" @click="toggleSellForm" dark outlined color="red">SELL</v-btn>
-                    </v-col>
-                    <buy-entry-form  v-if="showBuyForm" transition="fade"></buy-entry-form>
-                    <sell-entry-form @price-for-sale="updateSellPrice" @count-for-sale="updateSellCount" v-if="showSellForm" :max="totalCount / stock.lot_size"
+                <v-row align="center" justify="center" class="ma-1">
+                    <v-btn min-width="150px" min-height="50px" v-model="showBuyForm" @click="toggleBuyForm" color="#ffdd2d">BUY</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn min-width="150px" min-height="50px" v-model="showSellForm" @click="toggleSellForm" color="#ffdd2d">SELL</v-btn>
+                    <buy-entry-form v-if="showBuyForm" transition="fade"></buy-entry-form>
+                    <sell-entry-form @price-for-sale="updateSellPrice" @count-for-sale="updateSellCount" v-if="showSellForm"
+                                     :max="totalCount / stock.lot_size"
                                      @removed="getStock"></sell-entry-form>
                 </v-row>
             </v-col>
-            <v-col>
+            <v-col cols="12" sm="8" md="4">
                 <v-row>
                     <!--                    <v-checkbox v-model="group" :label="'Group'"></v-checkbox>-->
                     <entry :stock="stock" :entries="stock.entries" :group="group" :sellCount="sellCount"></entry>

@@ -1,19 +1,19 @@
 <template>
-    <v-col class="pa-1" cols="12" sm="12" md="12">
+    <v-col class="pa-1 ma-2" cols="12" sm="12" md="12">
         <v-form
                 ref="form"
                 v-model="valid"
                 lazy-validation
         >
             <v-card>
-                <v-card-text style="border: solid 1px red;">
+                <v-card-text >
 <!--                    <v-text-field type="number" v-model="price" :rules="priceRules" :min="0.001" step="0.001" label="Price"></v-text-field>-->
                     <v-col class="pa-0" cols="6" sm="6" md="6">
-                        <v-text-field :rules="countRules" v-model="count" type="number" :min="0" step="1" :max="maxCount" label="Count"
+                        <v-text-field outlined :rules="countRules" v-model="count" type="number" :min="0" step="1" :max="maxCount" label="Count"
                                       required></v-text-field>
                     </v-col>
-                    <v-btn rounded style="bottom: 15px" :disabled="!valid" absolute right color="red" @click="removeEntry">
-                        <v-icon color="white">fa-minus</v-icon>
+                    <v-btn style="bottom: 15px" :disabled="!valid" absolute right color="#ffdd2d" @click="removeEntry">
+                        <v-icon color="#333">fa-minus</v-icon>
                     </v-btn>
                 </v-card-text>
             </v-card>
