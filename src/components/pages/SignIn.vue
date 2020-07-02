@@ -14,8 +14,8 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer/>
-                        <v-btn color="success" outlined @click="signIn">Login</v-btn>
-                        <v-btn color="success" @click="signUp">Register</v-btn>
+                        <v-btn color="#ffdd2d" @click="signIn">Login</v-btn>
+                        <v-btn color="#ffdd2d" @click="signUp">Register</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
